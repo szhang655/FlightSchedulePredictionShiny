@@ -301,7 +301,7 @@ app_ui = ui.page_sidebar(
     ui.card(
         ui.card_header("Map"),
         output_widget("map"),
-        height="800px",
+        full_screen=True,
     ),
     ui.card(
         ui.card_header("Traveling Tips & Contact Information (Expandable)"
