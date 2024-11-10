@@ -1,3 +1,4 @@
+
 import ipyleaflet as L
 from shiny import App, render, ui, reactive
 import pandas as pd
@@ -122,7 +123,7 @@ def get_airport_weather(flight_date, origin_lat, origin_lon, dest_lat, dest_lon)
     delta_days = (flight_date - today).days
     
     if delta_days < 0 or delta_days > 7:
-        return None, "Weather data can only be predicted for future dates within 7 days."
+        return None, "Weather data only available for dates within next 7 days"
     
     origin_weather = get_weather_data(origin_lat, origin_lon)
     destination_weather = get_weather_data(dest_lat, dest_lon)
@@ -295,10 +296,12 @@ app_ui = ui.page_sidebar(
         ui.value_box("Estimated Arrival Time", ui.output_text("arrival_time_output"), theme="gradient-blue-indigo", showcase=icon_svg("plane")),
         ui.value_box("Weather", ui.output_text("weather_info"), theme="gradient-blue-indigo", showcase=icon_svg("cloud")),
         fill=False,
+        height="250px",
     ),
     ui.card(
         ui.card_header("Map"),
         output_widget("map"),
+        height="1000px",
     ),
     ui.card(
         ui.card_header("Traveling Tips & Contact Information"
@@ -472,7 +475,7 @@ def server(input, output, session):
                 else:
                     delay_minutes = predict_delay(flight_data)
                     arrival_time_local = calculate_local_time(input.arr_time(), delay_minutes, flight_date)
-                    message += "Flight is not likely to be cancelled. \n"
+                    message += "Not likely to be cancelled: "
                     # output.arrival_time_output.set(arrival_time_local)
                     return message + arrival_time_local
 
