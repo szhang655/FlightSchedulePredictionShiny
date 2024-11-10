@@ -296,15 +296,15 @@ app_ui = ui.page_sidebar(
         ui.value_box("Estimated Arrival Time", ui.output_text("arrival_time_output"), theme="gradient-blue-indigo", showcase=icon_svg("plane")),
         ui.value_box("Weather", ui.output_text("weather_info"), theme="gradient-blue-indigo", showcase=icon_svg("cloud")),
         fill=False,
-        height="230px",
+        height="220px",
     ),
     ui.card(
         ui.card_header("Map"),
         output_widget("map"),
-        height="1000px",
+        height="800px",
     ),
     ui.card(
-        ui.card_header("Traveling Tips & Contact Information"
+        ui.card_header("Traveling Tips & Contact Information (Expandable)"
         ),
         ui.p("Avoid flying on Mondays to minimize both cancellation and delay risk."),
         ui.p("In December, try to avoid flights operated by JetBlue (B6) due to higher delays."),
