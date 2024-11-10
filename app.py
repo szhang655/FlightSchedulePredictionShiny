@@ -573,7 +573,7 @@ def server(input, output, session):
 
     @render_widget
     def map():
-        return L.Map(zoom=8, center=(43.0731,-89.4012)) #default is madison
+        return L.Map(zoom=6, center=(43.0731,-89.4012)) #default is madison
     
     @reactive.effect
     def _():
