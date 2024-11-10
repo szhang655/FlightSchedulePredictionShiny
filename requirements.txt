@@ -5,7 +5,7 @@ geopy
 faicons
 requests
 pandas
-numpy
+numpy==1.23.5
 joblib
 datetime
 airportsdata
