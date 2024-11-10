@@ -25,14 +25,16 @@ us_airports = {code: data for code, data in airports.items() if data['country'] 
 us_iata_codes = list(us_airports.keys())
 
 # MODEL
+cancel_preprocessor = joblib.load('preprocessor_cancelled.pkl')
 with open('xgb_model_cancelled.pkl', 'rb') as f:
     cancel_model = pickle.load(f)
-cancel_preprocessor = joblib.load('preprocessor_cancelled.pkl')
 print("---------------Type of cancel_preprocessor:", type(cancel_preprocessor))
 
+
+delay_preprocessor = joblib.load('preprocessor_delayed.pkl')
 with open('xgb_model_delayed.pkl', 'rb') as f:
     delay_model = pickle.load(f)
-delay_preprocessor = joblib.load('preprocessor_delayed.pkl')
+print("---------------Type of cancel_preprocessor:", type(delay_preprocessor))
 
 # API
 API_KEY = 'c53937a42bddfc777aea71f5f9ec06ea'
@@ -482,6 +484,7 @@ def server(input, output, session):
 
         except Exception as e:
             message += f"Error occurred: {str(e)}"
+            print(e)
             return message 
         
         
