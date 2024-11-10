@@ -1,0 +1,15 @@
+shiny 
+shinywidgets
+ipyleaflet
+geopy
+faicons
+requests
+pandas
+numpy
+joblib
+datetime
+airportsdata
+pytz
+timezonefinder
+scikit-learn
+xgboost==2.1.2
