@@ -296,7 +296,7 @@ app_ui = ui.page_sidebar(
         ui.value_box("Estimated Arrival Time", ui.output_text("arrival_time_output"), theme="gradient-blue-indigo", showcase=icon_svg("plane")),
         ui.value_box("Weather", ui.output_text("weather_info"), theme="gradient-blue-indigo", showcase=icon_svg("cloud")),
         fill=False,
-        height="250px",
+        height="230px",
     ),
     ui.card(
         ui.card_header("Map"),
@@ -559,17 +559,7 @@ def server(input, output, session):
             L.Polyline(locations=[loc1, loc2], color="blue", weight=2, name="line")
         )
 
-    # def on_move1(**kwargs):
-    #     return on_move("loc1", **kwargs)
 
-    # def on_move2(**kwargs):
-    #     return on_move("loc2", **kwargs)
-    
-    # def on_move(id, **kwargs):
-    #     loc = kwargs["location"]
-    #     loc_str = f"{loc[0]}, {loc[1]}"
-    #     choices = city_names + [loc_str]
-    #     ui.update_selectize(id, selected=loc_str, choices=choices)
 
     @render_widget
     def map():
