@@ -1,4 +1,5 @@
 
+
 import ipyleaflet as L
 from shiny import App, render, ui, reactive
 import pandas as pd
@@ -104,7 +105,7 @@ def validate_hour_minute(time_str):
     return False
 
 def validate_flight_number(flight_number):
-    return flight_number[:2].isalpha() and len(flight_number) >= 2
+    return not(flight_number[:2].isnumeric()) and len(flight_number) >= 2
 
 def validate_date(date_str):
     return date_str.month in [11, 12, 1]  # 仅允许11月、12月和1月的日期
