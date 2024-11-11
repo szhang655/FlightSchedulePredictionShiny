@@ -1,3 +1,4 @@
+
 import ipyleaflet as L
 from shiny import App, render, ui, reactive
 import pandas as pd
@@ -305,12 +306,12 @@ app_ui = ui.page_sidebar(
     ui.card(
         ui.card_header("Traveling Tips & Contact Information (Expandable)"
         ),
-        ui.p("Avoid flying on Mondays to minimize both cancellation and delay risk."),
-        ui.p("In December, try to avoid flights operated by JetBlue (B6) due to higher delays."),
+        ui.p("Recommended Airlines: DL, UA, and AA"),
+        ui.p("Avoid flying on Mondays to minimize both cancelation and delay risk."),
         ui.p("In January, consider avoiding United Airlines (UA) flights, as they tend to have higher cancellation and delay rates during this month."),
-        ui.p("Try not to schedule flights 2 days before major holidays or within 5 days after, as these are peak travel times with higher chances of delays and cancellations."),
-        ui.p(""), 
-        # ui.p("For Airlines: Allocate extra resources and improve scheduling during high cancellation times (mid-week, certain months, and holiday seasons"),  
+        ui.p("Delta and American Airlines are recommended for lower risk of cancelations, avoid flying with Southwest and Alaska because they appear to be less reliable in terms of cancelation. "), 
+        ui.p("Try not to schedule flights 2 days before major holidays or within 5 days after, as these are peak travel times with higher chances of delays and cancelations."),
+        ui.p("Delta and American Airlines are recommended to avoid delays in case of tight schedules."),
         ui.p("** If you have any questions about the app, feel free to contact us at: hyunseung@stat.wisc.edu, szhang655@wisc.edu, clou25@wisc.edu, rming@wisc.edu, myu259@wisc.edu"),
         ui.card_footer("Copyright @ Fall2024-Stat628-Module3-Group5"),
         full_screen=True,
