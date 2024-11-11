@@ -1,5 +1,3 @@
-
-
 import ipyleaflet as L
 from shiny import App, render, ui, reactive
 import pandas as pd
@@ -350,11 +348,11 @@ def server(input, output, session):
 
         if not validate_flight_number(input.fl_number()):
             can_predict = False
-            warning_message += "Invalid flight number. Must start with two letters.\n"
+            warning_message += "Invalid flight number. Cannot start with two digits.\n"
 
         if not validate_flight_number(input.op_unique_carrier()):
             can_predict = False
-            warning_message += "Invalid operating carrier flight number. Must start with two letters.\n"
+            warning_message += "Invalid operating carrier flight number. Cannot start with two digits. \n"
 
         if not validate_date(input.fl_date()):
             can_predict = False
