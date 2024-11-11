@@ -15,8 +15,6 @@ from timezonefinder import TimezoneFinder
 import requests
 from math import atan
 import traceback
-from zipfile import ZipFile
-import os
 
 
 
@@ -35,11 +33,6 @@ delay_preprocessor = joblib.load('preprocessor_delayed.pkl')
 with open('xgb_model_delayed.pkl', 'rb') as f:
     delay_model = pickle.load(f)
 
-
-#  HISTORICAL DATA
-# historical_data = pd.read_csv('historical_weather.csv')
-# Open the zip file
-historical_data = pd.read_csv('historical_weather.zip', compression='zip', header=0, sep=',', quotechar='"')
 
 # API
 API_KEY = 'c53937a42bddfc777aea71f5f9ec06ea'
@@ -115,35 +108,6 @@ def validate_flight_number(flight_number):
 
 def validate_date(date_str):
     return date_str.month in [11, 12, 1]  # 仅允许11月、12月和1月的日期
-
-
-def get_historical_weather_data(fl_time,dep_airport,arr_airport):
-    fl_time = fl_time.strftime("%Y-%m-%d %H:%M:%S")
-    filtered_entry = historical_data[(pd.to_datetime(historical_data['fl_datetime']) == pd.to_datetime(fl_time)) & (historical_data['ORIGIN']== dep_airport) & (historical_data['DEST']==arr_airport)]
-    if len(filtered_entry)==1:
-        history_weather = {
-            "WetBulbTempCategory_DEST": filtered_entry["WetBulbTempCategory_DEST"],
-            "EXTREME_DEST": filtered_entry["EXTREME_DEST"],
-            "ParsedSkyCondition_DEST": filtered_entry["ParsedSkyCondition_DEST"],
-            "PrecipitationCategory_DEST": filtered_entry["PrecipitationCategory_DEST"],
-            "HumidityCategory_ORIGIN": filtered_entry["HumidityCategory_ORIGIN"],
-            "ParsedSkyCondition_ORIGIN": filtered_entry["ParsedSkyCondition_ORIGIN"],
-            "SnowfallCategory_DEST": filtered_entry["SnowfallCategory_DEST"],
-            "SnowfallCategory_ORIGIN": filtered_entry["SnowfallCategory_ORIGIN"],
-            "WetBulbTempCategory_ORIGIN": filtered_entry["WetBulbTempCategory_ORIGIN"],
-            "SnowDepthCategory_DEST":filtered_entry["SnowDepthCategory_DEST"],
-            "HumidityCategory_DEST": filtered_entry["HumidityCategory_DEST"],
-            "PrecipitationCategory_ORIGIN": filtered_entry["PrecipitationCategory_ORIGIN"],
-            "PressureCategory_ORIGIN": filtered_entry["PressureCategory_ORIGIN"],
-            "SnowDepthCategory_ORIGIN": filtered_entry["SnowDepthCategory_ORIGIN"],
-            "WindSpeedCategory_ORIGIN": filtered_entry["WindSpeedCategory_ORIGIN"],
-            "PressureCategory_DEST": filtered_entry["PressureCategory_DEST"],
-            "EXTREME_ORIGIN": filtered_entry["EXTREME_ORIGIN"],
-            "WindSpeedCategory_DEST": filtered_entry["WindSpeedCategory_DEST"]
-        }
-        return history_weather
-    else:
-        return None
 
 # Function to fetch weather data from the OpenWeather API
 def get_weather_data(lat, lon):
@@ -330,7 +294,7 @@ app_ui = ui.page_sidebar(
     ui.layout_column_wrap(
         ui.value_box("Great Circle Distance", ui.output_text("great_circle_dist"), theme="gradient-blue-indigo", showcase=icon_svg("globe")),
         ui.value_box("Estimated Arrival Time", ui.output_text("arrival_time_output"), theme="gradient-blue-indigo", showcase=icon_svg("plane")),
-        ui.value_box("Destination City Weather", ui.output_text("weather_info"), theme="gradient-blue-indigo", showcase=icon_svg("cloud")),
+        ui.value_box("Destination Airport Weather", ui.output_text("weather_info"), theme="gradient-blue-indigo", showcase=icon_svg("cloud")),
         height="220px",
     ),
     ui.card(
@@ -368,11 +332,11 @@ def server(input, output, session):
 
         if not input.departure_airport():
             can_predict = False
-            warning_message += "Invalid departure Airport.\n"
+            warning_message += "Invalid departure Airport. .\n"
         
         if not input.arrival_airport():
             can_predict = False
-            warning_message += "Invalid departure Airport.\n"
+            warning_message += "Invalid departure Airport. .\n"
         
         if not validate_hour_minute(input.dep_time()):
             can_predict = False
@@ -498,11 +462,8 @@ def server(input, output, session):
                         flight_data["PressureCategory_DEST"]= weather_data['destination']['PressureCategory_DEST']
                         flight_data["EXTREME_ORIGIN"]= weather_data['origin']['EXTREME_ORIGIN']
                         flight_data["WindSpeedCategory_DEST"]= weather_data['destination']['WindSpeedCategory_DEST']
-                elif flight_date >= datetime(2018,1,1).date() and flight_date <= datetime(2024,1,31).date():
-                    historical_data = get_historical_weather_data(dep_cst_time,input.departure_airport(),input.arrival_airport())
-                    if historical_data is not None:
-                        for key in historical_data.keys():
-                            flight_data[key] = historical_data[key]
+                    
+
                         
     
 
@@ -550,7 +511,6 @@ def server(input, output, session):
                 return message
         except Exception as e:
             message += f"Error occurred: {str(e)}"
-            traceback.print_exc() 
             return message
         
     @output
@@ -568,26 +528,9 @@ def server(input, output, session):
                 
                 weather_data, error_message = get_airport_weather(flight_date, lat1, lon1, lat2, lon2)
                 if weather_data == None:
-                    if flight_date > datetime(2018,1,1).date() and flight_date < datetime(2024,1,31).date():
-                        tz_finder = TimezoneFinder()
-                        dep_timezone_str = tz_finder.timezone_at(lng=lon1, lat=lat1)
-                        dep_local_tz = pytz.timezone(dep_timezone_str)
-                        cst_tz = pytz.timezone('US/Central') 
-                        dep_scheduled_datetime = datetime.combine(flight_date, datetime.strptime(input.dep_time(), "%H:%M").time())
-                        dep_local_time = dep_local_tz.localize(dep_scheduled_datetime) 
-                        dep_cst_time = dep_local_time.astimezone(cst_tz) 
-                        historical_data = get_historical_weather_data(dep_cst_time,input.departure_airport(),input.arrival_airport())
-                        if historical_data is not None:
-                            return 'Historical Weather Data Found.'
-                        else:
-                            return error_message
-                    else:
-                     return error_message
-
+                    return error_message
                 else:
                     return str(weather_data['destination']['temperature_DEST']) + '°F'
-                
-
             else:
                 return message
         except Exception as e:
