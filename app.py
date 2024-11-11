@@ -475,7 +475,7 @@ def server(input, output, session):
                 else:
                     delay_minutes = predict_delay(flight_data)
                     arrival_time_local = calculate_local_time(input.arr_time(), delay_minutes, flight_date)
-                    message += "  not likely to be canceled."
+                    message += ", not likely to be canceled."
                     # output.arrival_time_output.set(arrival_time_local)
                     return arrival_time_local+message
 
