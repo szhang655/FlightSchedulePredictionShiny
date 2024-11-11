@@ -35,7 +35,7 @@ with open('xgb_model_delayed.pkl', 'rb') as f:
 
 
 #  HISTORICAL DATA
-historical_data = pd.read_csv('historical_weather.csv')
+historical_data = pd.read_csv('historical_weather.csv.zip', compression='zip', header=0, sep=',', quotechar='"')
 
 
 # API
