@@ -35,8 +35,7 @@ with open('xgb_model_delayed.pkl', 'rb') as f:
 
 
 #  HISTORICAL DATA
-url = 'https://media.githubusercontent.com/media/szhang655/FlightSchedulePredictionShiny/refs/heads/main/historical_weather.csv'
-historical_data = pd.read_csv(url)
+historical_data = pd.read_csv('historical_weather.csv')
 
 
 # API
