@@ -116,6 +116,7 @@ def validate_date(date_str):
 
 def get_historical_weather_data(fl_time,dep_airport,arr_airport):
     fl_time = fl_time.strftime("%Y-%m-%d %H:%M:%S")
+    print("------------",historical_data.columns)
     filtered_entry = historical_data[(pd.to_datetime(historical_data['fl_datetime']) == pd.to_datetime(fl_time)) & (historical_data['ORIGIN']== dep_airport) & (historical_data['DEST']==arr_airport)]
     if len(filtered_entry)==1:
         history_weather = {
