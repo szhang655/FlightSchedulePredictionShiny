@@ -295,6 +295,7 @@ app_ui = ui.page_sidebar(
         ui.value_box("Great Circle Distance", ui.output_text("great_circle_dist"), theme="gradient-blue-indigo", showcase=icon_svg("globe")),
         ui.value_box("Estimated Arrival Time", ui.output_text("arrival_time_output"), theme="gradient-blue-indigo", showcase=icon_svg("plane")),
         ui.value_box("Destination Airport Weather", ui.output_text("weather_info"), theme="gradient-blue-indigo", showcase=icon_svg("cloud")),
+        fill = False,
         height="220px",
     ),
     ui.card(
