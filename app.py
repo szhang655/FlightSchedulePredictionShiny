@@ -39,7 +39,7 @@ API_KEY = 'c53937a42bddfc777aea71f5f9ec06ea'
 UNITS = 'imperial'
 EXCLUDE = 'minutely,hourly,alerts'
 
-# 预测函数
+# PREDICT HELPER FUNCTION
 def predict_cancel(flight_data):
     X_cancel = cancel_preprocessor.transform(pd.DataFrame([flight_data]))
     cancel = cancel_model.predict(X_cancel)
@@ -50,7 +50,7 @@ def predict_delay(flight_data):
     delay_time = delay_model.predict(X_delay)
     return delay_time[0]
 
-# 输出时间转换函数
+# HELPER FUNCTION: ARRIVAL TIME CHANGE
 def calculate_local_time(scheduled_time, delay_minutes, flight_date):
     delay_minutes = int(delay_minutes)  
     scheduled_datetime = datetime.combine(flight_date, datetime.strptime(scheduled_time, "%H:%M").time())
@@ -58,18 +58,18 @@ def calculate_local_time(scheduled_time, delay_minutes, flight_date):
     return arrival_datetime.strftime("%Y-%m-%d %H:%M")
 
 
-# 获取机场数据，包括经纬度
+# HELPER FUNCTION: GET AIRPORT LONG, LAT
 def get_airport_data(airport_code):
     airport = us_airports.get(airport_code, None)
     if airport:
         return airport["lat"], airport["lon"]
     return None, None
 
-# 计算两地之间的Great Circle Distance
+# HELPER FUNCTION: GET Great Circle Distance
 def calculate_great_circle_distance(lat1, lon1, lat2, lon2):
     return  great_circle((lat1, lon1), (lat2, lon2)).miles  # 返回距离（英里）
 
-# 动态计算假日天数的函数
+# HELPER FUNCTION: CALCULATE DAYS TO HOLIDAYS
 def calculate_days_to_holidays(flight_date):
     # 获取航班的年份和月份
     year = flight_date.year
@@ -88,7 +88,7 @@ def calculate_days_to_holidays(flight_date):
     return days_after_thanksgiving, days_after_christmas, days_after_new_year
 
 
-# 输入验证函数
+# HELPER FUNCTIONS: VALIDATE INPUT
 def validate_time_format(time_str):
     try:
         datetime.strptime(time_str, "%H:%M")
